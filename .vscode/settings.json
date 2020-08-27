@@ -1,0 +1,8 @@
+{
+   "python.pythonPath": "/Users/classen/miniconda3/bin/python",
+   "restructuredtext.builtDocumentationPath": "${workspaceRoot}/_build/html",
+   "restructuredtext.updateOnTextChanged"    : "true",
+   "restructuredtext.updateDelay"            : 300,
+   "restructuredtext.sphinxBuildPath": null,
+   "restructuredtext.confPath": ""
+}

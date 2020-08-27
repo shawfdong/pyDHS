@@ -1,0 +1,21 @@
+pydhs package
+=============
+
+Submodules
+----------
+
+pydhs.skeleton module
+---------------------
+
+.. automodule:: pydhs.skeleton
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pydhs
+   :members:
+   :undoc-members:
+   :show-inheritance:
