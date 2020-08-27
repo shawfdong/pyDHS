@@ -9,7 +9,7 @@ The plan is for this to be a generic python-based Distributed Hardware Server pr
 Description
 ===========
 
-The idea is that this code base will provide the necessary functionality to communicate with DCSS and be configurable for different peices of hardware. For example it could be configured to control a Raspberry Pi, or run some python scripts, etc.
+This code base will provide the necessary functionality to communicate with DCSS and be configurable for different peices of hardware. For example it could be configured to control a Raspberry Pi, or run some python scripts, etc.
 
 To begin with I am thinking about a loop detection DHS so my notes might reflect that bias to begin with.
 
@@ -21,6 +21,7 @@ To begin with I am thinking about a loop detection DHS so my notes might reflect
 
 General Framework for a loop DHS
 ================================
+
 * write in python.
 * run on voltron (for access to 8 NVIDIA Titan V GPUs).
 * establish port/socket to communicate with DCSS using xos protocol.
@@ -31,7 +32,7 @@ General Framework for a loop DHS
 DCSS Communications
 ===================
 
-The beamline uses a distributed control system akin to a hub and spoke control model where the central hub is referred to as DCSS (Distributed Control System Server) and the spokes are called DHSs (Distributed Hardware Controlers). In order to write a new DHS we need to establish communications with DCSS.  
+The beamline uses a distributed control system akin to a hub and spoke control model where the central hub is referred to as DCSS (Distributed Control System Server) and the spokes are called DHSs (Distributed Hardware Controllers). In order to write a new DHS we need to establish communications with DCSS.  
 
 DCSS communicates with DHS using the ``xos`` protocol. All ``xos`` messages are prefixed with a 4 character code that will tell you about the the direction of the message. For example:  
 
@@ -41,7 +42,7 @@ DCSS communicates with DHS using the ``xos`` protocol. All ``xos`` messages are 
 | ``gtos_`` **G**\ UI **to** **s**\ erver for messages originating from the Blu-Ice GUI and destined for DCSS.  
 | ``stog_`` **s**\ erver **to** **G**\ UI for messages originating from DCSS and destined for the Blu-Ice GUI.  
 
-Details can be found in the `DCS Admin Guide <>`
+Details can be found in the `DCS Admin Guide <https://github.com/dsclassen/pyDHS/blob/master/docs/DCSS_ADMIN_GUIDE.pdf>`. This PDF documentation is quite old at this point and has not been updated since 2005, but ti is still worth browsing if you intend to write a functioning DHS.
 
 ....
 
