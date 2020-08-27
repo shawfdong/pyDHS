@@ -35,11 +35,13 @@ The beamline uses a distributed control system akin to a hub and spoke control m
 
 DCSS communicates with DHS using the ``xos`` protocol. All ``xos`` messages are prefixed with a 4 character code that will tell you about the the direction of the message. For example:  
 
-| ``stoc_`` **s**\ erver **to** **c**\ lient for messages originating from DCSS and destined for a client application.  
+| ``stoc_`` **s**\ erver **to** **c**\ lient for messages originating from DCSS and destined for a client (hardware or software).  
 | ``stoh_`` **s**\ erver **to** **h**\ ardware for messages originating from DCSS and destined for hardware (i.e. a DHS).  
 | ``htos_`` **h**\ ardweare **to** **s**\ erver for messages originating from a DHS and destined for DCSS.  
 | ``gtos_`` **G**\ UI **to** **s**\ erver for messages originating from the Blu-Ice GUI and destined for DCSS.  
 | ``stog_`` **s**\ erver **to** **G**\ UI for messages originating from DCSS and destined for the Blu-Ice GUI.  
+
+Details can be found in the `DCS Admin Guide <>`
 
 ....
 
@@ -88,12 +90,12 @@ It is also worth noting that DCSS can "go away" and it is important that the DHS
 
 ....
 
-Configure motors, shutters, ion gauges, strings
----------------------------------------------------------
+Configure motors, shutters, strings, ion gauges, and operations
+---------------------------------------------------------------
 
 Configure motors by sending an ``htos_configure_device`` command. For example:  
 
-``htos_configure_device energy 12398.42 20000 2000 1 100000 1 -600 0 0 1 0 0 0\0...``
+``htos_configure_device energy 12398.42 20000 2000 1 100000 1 -600 0 0 1 0 0 0\0...``  
 
 Where:
 
@@ -114,7 +116,7 @@ field     value                             notes
 12        |  ``0``                          Lock the motor.  "1" is locked "0" unlocked
 13        |  ``0``                          Enable anti-backlash movement.  "1" enabled "0" disabled
 14        |  ``0``                          Reverse the motor direction.  "1" enabled "0" disabled
-15        |  ``0``                          Not sure.
+15        |  ``0``                          Circle mode. (might be used for gonio phi?)
 ======    ==============================    ===============================================================
 
 
@@ -125,27 +127,41 @@ Configure shutters by sending an ``htos_configure_shutter`` command. For example
 
 |  ``htos_configure_shutter shutter open close open\0...``  
 |  or  
-|  ``htos_configure_shutter Se open close open\0...``
+|  ``htos_configure_shutter Se open close open\0...``  
 
 Where:
 
 ======    ==============================    ===============================================================
 field     value                             notes
 ======    ==============================    ===============================================================
-1         |  ``htos_configure_shutter``     The xos command to configure a shutter.  
-2         |  ``shutter``                    The name of the shutter you are configuring.  
-3         |  ``open``                       The name for the "open" position of this shutter.  
-4         |  ``closed``                     The name for the "closed" position of this shutter.  
-5         |  ``open``                       The current position of this shutter.  
+1         |  ``htos_configure_shutter``     | The xos command to configure a shutter.  
+2         |  ``shutter``                    | The name of the shutter you are configuring.  
+3         |  ``open``                       | The name for the "open" position of this shutter.  
+4         |  ``closed``                     | The name for the "closed" position of this shutter.  
+5         |  ``open``                       | The current position of this shutter.  
 ======    ==============================    ===============================================================
 
 Although you can get a away with using "in" and "out" or "on" and "off" for shutter devices, there are certain situations in DCSS where this doesn’t work, so just use "open" and "closed" for everything.  NOTE: it is "closed" and **NOT** "close".
 
-Configure strings by sending an ``htos_set_string_completed`` command.
+Configure strings by sending an ``htos_set_string_completed`` command. For example:  
 
-htos_set_string_completed detectorType normal PILATUS6
+|  a simple string with a single word
+|  ``htos_set_string_completed detectorType normal PILATUS6``  
+|  or a string with multiple key/value pairs
+|  ``htos_set_string_completed detectorStatus normal TEMP 26.0 HUMIDITY 2.1 GAPFILL -1 EXPOSUREMODE null DISK_SIZE_KB 0 DISK_USED_KB 0 DISK_USE_PERCENT 0 FREE_IMAGE_SPACE 0 SUM_IMAGES false SUM_IMAGES_DELTA_DEG 0.1 N_FRAME_IMG 1 THRESHOLD 6330.0 GAIN autog THRESHOLD_SET false SETTING_THRESHOLD false``  
 
-htos_set_string_completed detectorStatus normal TEMP0 26.0 TEMP1 -99.0 
+Where:  
+
+======    ================================    ===============================================================
+field     value                               notes
+======    ================================    ===============================================================
+1         |  ``htos_set_string_completed``    | The xos command to set a string in DCSS.  
+2         |  ``detectorType``                 | The name of the string you are configuring.  
+3         |  ``normal``                       | Tell DCSS that the string value was set.  
+4         |  ``string1``                      | The value of the string.  
+5         |  ``more values``                  | More values (optional).  
+======    ================================    ===============================================================
+
 
 Strings are denoted as ``standardString`` or as mirror of teh stringname. I'm entirely clear on the importance or significance of this difference.
 
