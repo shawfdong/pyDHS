@@ -4,10 +4,10 @@ pydhs package
 Submodules
 ----------
 
-pydhs.skeleton module
----------------------
+pydhs.pyDHS module
+------------------
 
-.. automodule:: pydhs.skeleton
+.. automodule:: pydhs.pyDHS
    :members:
    :undoc-members:
    :show-inheritance:

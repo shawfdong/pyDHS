@@ -6,6 +6,12 @@ pyDHS
 The plan is for this to be a generic python-based Distributed Hardware Server project.
 
 
+.. toctree::
+   :maxdepth 3
+
+   Description
+   Installation
+
 Description
 ===========
 
