@@ -27,23 +27,6 @@ __license__ = "mit"
 
 _logger = logging.getLogger(__name__)
 
-
-def fib(n):
-    """Fibonacci example function
-
-    Args:
-      n (int): integer
-
-    Returns:
-      int: n-th Fibonacci number
-    """
-    assert n > 0
-    a, b = 1, 1
-    for i in range(n-1):
-        a, b = b, a+b
-    return a
-
-
 def parse_args(args):
     """Parse command line parameters
 
@@ -54,16 +37,19 @@ def parse_args(args):
       :obj:`argparse.Namespace`: command line parameters namespace
     """
     parser = argparse.ArgumentParser(
-        description="Just a Fibonacci demonstration")
+        description="DHS Distributed Hardware Server")
     parser.add_argument(
         "--version",
         action="version",
         version="pyDHS {ver}".format(ver=__version__))
     parser.add_argument(
-        dest="n",
-        help="n-th Fibonacci number",
-        type=int,
-        metavar="INT")
+        dest="beamline",
+        help="Beamline Name (e.g. BL-831)",
+        metavar="Beamline")
+    parser.add_argument(
+        dest="dhs_name",
+        help="DHS Name",
+        metavar="DHS Name")
     parser.add_argument(
         "-v",
         "--verbose",
@@ -93,23 +79,28 @@ def setup_logging(loglevel):
 
 
 def main(args):
-    """Main entry point allowing external calls
+   """Main entry point allowing external calls
 
-    Args:
+   Args:
       args ([str]): command line parameter list
-    """
-    args = parse_args(args)
-    setup_logging(args.loglevel)
-    _logger.debug("Starting crazy calculations...")
-    print("The {}-th Fibonacci number is {}".format(args.n, fib(args.n)))
-    _logger.info("Script ends here")
+   """
+   args = parse_args(args)
+   setup_logging(args.loglevel)
+   _logger.debug("Starting pyDHS")
+
+   # start communication with DCSS
+   print("connect to DCSS for beamline: {}".format(args.beamline))
+   # perform DHS-specific stuff 
+   print("DHS-specific stuff: {}".format(args.dhs_name))
+
+   _logger.info("Ending pyDHS")
 
 
 def run():
-    """Entry point for console_scripts
-    """
-    main(sys.argv[1:])
+   """Entry point for console_scripts
+   """
+   main(sys.argv[1:])
 
 
 if __name__ == "__main__":
-    run()
+   run()

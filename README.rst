@@ -19,6 +19,22 @@ To begin with I am thinking about a loop detection DHS so my notes might reflect
 |  ``pyDHS BL-831 deicer``  to run a sample deicer that runs on a Raspberry Pi.
 
 
+Installation
+============
+
+|  ``git clone git@github.com:dsclassen/pyDHS.git``
+|  ``cd pyDHS``
+|  ``python setup.py develop``
+
+Usage
+=====
+
+|  ``pyDHS Beamline DHSName``
+
+For example:
+
+|  ``pyDHS BL-831 loop``
+
 General Framework for a loop DHS
 ================================
 
@@ -42,7 +58,9 @@ DCSS communicates with DHS using the ``xos`` protocol. All ``xos`` messages are 
 | ``gtos_`` **G**\ UI **to** **s**\ erver for messages originating from the Blu-Ice GUI and destined for DCSS.  
 | ``stog_`` **s**\ erver **to** **G**\ UI for messages originating from DCSS and destined for the Blu-Ice GUI.  
 
-Details can be found in the `DCS Admin Guide <https://github.com/dsclassen/pyDHS/blob/master/docs/DCSS_ADMIN_GUIDE.pdf>`. This PDF documentation is quite old at this point and has not been updated since 2005, but ti is still worth browsing if you intend to write a functioning DHS.
+More details can be found in the `DCS Admin Guide <https://github.com/dsclassen/pyDHS/blob/master/docs/DCSS_ADMIN_GUIDE.pdf>`_. This PDF documentation has not been updated since 2005, but it is still worth browsing if you intend to write a functioning DHS.
+
+We've tried to summarize some of the more useful points below.
 
 ....
 
@@ -86,6 +104,7 @@ DCSS will then send messages about the different motors, shutters, ion guages, s
 
 |  ``stoh_register_string string1 standardString\0\0\0...``  
 |  ``stoh_register_string string2 string2\0\0\0...``  
+
 
 It is also worth noting that DCSS can "go away" and it is important that the DHS be able to automagically re-establish the socket connection should this happen.
 
@@ -146,9 +165,12 @@ Although you can get a away with using "in" and "out" or "on" and "off" for shut
 
 Configure strings by sending an ``htos_set_string_completed`` command. For example:  
 
-|  a simple string with a single word
+a simple string with a single word:  
+
 |  ``htos_set_string_completed detectorType normal PILATUS6``  
-|  or a string with multiple key/value pairs
+
+or a string with multiple key/value pairs  
+
 |  ``htos_set_string_completed detectorStatus normal TEMP 26.0 HUMIDITY 2.1 GAPFILL -1 EXPOSUREMODE null DISK_SIZE_KB 0 DISK_USED_KB 0 DISK_USE_PERCENT 0 FREE_IMAGE_SPACE 0 SUM_IMAGES false SUM_IMAGES_DELTA_DEG 0.1 N_FRAME_IMG 1 THRESHOLD 6330.0 GAIN autog THRESHOLD_SET false SETTING_THRESHOLD false``  
 
 Where:  
@@ -158,13 +180,14 @@ field     value                               notes
 ======    ================================    ===============================================================
 1         |  ``htos_set_string_completed``    | The xos command to set a string in DCSS.  
 2         |  ``detectorType``                 | The name of the string you are configuring.  
-3         |  ``normal``                       | Tell DCSS that the string value was set.  
-4         |  ``string1``                      | The value of the string.  
-5         |  ``more values``                  | More values (optional).  
+3         |  ``normal``                       | Tell DCSS that the string value was set successfully.  
+4         |  ``PILATUS6``                     | The value of the string.  
 ======    ================================    ===============================================================
 
 
 Strings are denoted as ``standardString`` or as mirror of teh stringname. I'm entirely clear on the importance or significance of this difference.
+
+ion gauges and operations require no configuration.
 
 ....
 
@@ -184,30 +207,44 @@ The ``stoh_start_operation`` messages look like this
 
 ``stoh_start_operation operationName1 operationID arg1 arg2 .... argN``  
 
-|  ``operationName1``   the operation that DCSS has requested this DHS to execute.  
-|  ``operationID``   a unique numeric ID used to keep track of this operation instance.  
-|  ``arg1 arg2 .... argN``   optional set of args to pass into the DHS from DCSS.  
+Where:
 
-pyDHS should respond with periodic updates in the form of  
+======    ================================    ========================================================================
+field     value                               notes
+======    ================================    ========================================================================
+1         |  ``operationName1``               |  The operation that DCSS has requested this DHS to execute.  
+2         |  ``operationID``                  |  A unique numeric ID used to keep track of this operation instance.
+3         |  ``arg1 arg2 .... argN``          |  Optional set of args to pass into the DHS from DCSS.  
+======    ================================    ========================================================================
+
+pyDHS can respond with periodic updates in the form of  
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ``htos_operation_update operationName1 operationID updateMessage``  
 
+Where:
 
-| ``operationName1``   the operation that DCSS has requested this DHS to execute.  
-| ``operationID``   a unique numeric ID used to keep track of this operation instance.  
-| ``updateNessage``   anything you want to pass back to DCSS.  
+======    ================================    ========================================================================
+field     value                               notes
+======    ================================    ========================================================================
+1         | ``operationName1``                |  The operation that DCSS has requested this DHS to execute.  
+2         | ``operationID``                   |  A unique numeric ID used to keep track of this operation instance.
+3         | ``updateNessage``                 |  Any message you want to pass back to DCSS.  
+======    ================================    ========================================================================
 
 and when the operation is completed with a message like this  
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ``htos_operation_completed operationName1 operationID reason returnMessage``  
 
-| ``operationName1``   the operation that DCSS has requested this DHS to execute.  
-| ``operationID``   a unique numeric ID used to keep track of this operation instance.  
-| ``reason``   in theory can be anything, but normally would be `normal` or `error`
-| ``updateMessage``   any addition you want to pass back to DCSS.  
-
+======    ================================    ========================================================================
+field     value                               notes
+======    ================================    ========================================================================
+1         | ``operationName1``                |  The operation that DCSS has requested this DHS to execute.  
+2         | ``operationID``                   |  A unique numeric ID used to keep track of this operation instance.  
+3         | ``reason``                        |  In theory can be anything, but normally would be `normal` or `error`
+4         | ``updateMessage``                 |  Any additional info you want to pass back to DCSS.  
+======    ================================    ========================================================================
 
 ....
 
@@ -263,7 +300,7 @@ psuedo code for a loop DHS
       loopDHS returns a list of list. we can discuss exactly what gets passed back.  
 
 
-There is a 1024 byte limit to each ``xos2`` response so we will probably have to break this down and send the results from each image back to DCSS one at a time, and then reassemble within the ``loopFast.tcl`` scripted operation.
+I'm pretty sure there is a 1024 byte limit to each ``xos2`` response so we will probably have to break this down and send the results from each image back to DCSS one at a time, and then reassemble within the ``loopFast.tcl`` scripted operation.
 
 .. code-block:: tcl
 
