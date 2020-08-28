@@ -5,12 +5,6 @@ pyDHS
 
 The plan is for this to be a generic python-based Distributed Hardware Server project.
 
-.. toctree::
-   :maxdepth 3
-
-   Description
-   Installation
-
 Description
 ===========
 
@@ -251,19 +245,32 @@ field     value                               notes
 4         | ``updateMessage``                 |  Any additional info you want to pass back to DCSS.  
 ======    ================================    ========================================================================
 
+
+Still need more details for handling motors and shutter.
+
 ....
 
 AXIS Video Receiver Port  
 ==========================
 
-will need to open a port than can receive a stream of jpeg images from our axis video server. The AutoML API requires that images be base64 encoded.
+For a loopDHS we will need to open a port than can receive a stream of jpeg images from our axis video server. The AutoML API requires that images be base64 encoded.
 
 ....
 
 RESTful API loop detection and classification  
 ===============================================
 
-details of the Google Cloud AutoML docker stuff will go here.  
+1. Train and Download a loop classification and detection model.
+2. Configure a local GPU machine with docker and GCP docker image.
+3. Test the REST API.
+
+Details of the Google Cloud AutoML docker stuff will go here.  
+
+* Overview of `AutoML <https://cloud.google.com/automl>`_ tools on Google Cloud Platform.
+* `Details <https://cloud.google.com/vision/automl/docs/edge-quickstart>`_ for training an AutoML Vision model.
+* `Tutorial <https://cloud.google.com/vision/automl/docs/containers-gcs-tutorial>`_ to deploy your model in an Edge container.
+
+
 
 ....
 
@@ -284,11 +291,11 @@ These are all the operations the current camera DHS is responsible for
    reboxLoopImage
 
 
-we may not need/want all of these in new loopDHS
+We may not need/want all of these in new loopDHS
 
 ....
 
-psuedo code for a loop DHS
+Psuedo code for a loop DHS
 ==========================
 
 `loopFast.tcl` or similar scripted operation running in the dcss tcl interpreter performs the following:  

@@ -2,5 +2,5 @@
    "python.pythonPath": "/Users/classen/miniconda3/bin/python",
    "restructuredtext.linter.disabled": true,
    "restructuredtext.updateDelay": 300,
-   "restructuredtext.confPath": "${workspaceFolder}/docs"
+   "restructuredtext.confPath": ""
 }
