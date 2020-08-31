@@ -18,6 +18,8 @@ Note: This skeleton file can be safely removed if not needed!
 import argparse
 import sys
 import logging
+from pydhs import dcss
+from pydhs import test
 
 from pydhs import __version__
 
@@ -89,9 +91,15 @@ def main(args):
    _logger.debug("Starting pyDHS")
 
    # start communication with DCSS
-   print("connect to DCSS for beamline: {}".format(args.beamline))
+   #print("connect to DCSS for beamline: {}".format(args.beamline))
    # perform DHS-specific stuff 
-   print("DHS-specific stuff: {}".format(args.dhs_name))
+   #print("DHS-specific stuff: {}".format(args.dhs_name))
+
+   cv = test.myClassVar
+   print("cv: {}".format(cv))
+   my_dhs = test.testDHS('my_test_dhs', '10.11.12.13')
+   my_dhs.loop()
+
 
    _logger.info("Ending pyDHS")
 
