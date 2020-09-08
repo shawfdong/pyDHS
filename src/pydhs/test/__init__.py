@@ -1,0 +1,1 @@
+myClassVar = "just a test CV"

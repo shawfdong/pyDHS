@@ -1,5 +1,5 @@
 {
-   "python.pythonPath": "/Users/classen/miniconda3/bin/python",
+   "python.pythonPath": "/opt/anaconda3/bin/python",
    "restructuredtext.linter.disabled": true,
    "restructuredtext.updateDelay": 300,
    "restructuredtext.confPath": ""

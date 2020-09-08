@@ -5,9 +5,9 @@ console script. To run this script uncomment the following lines in the
 [options.entry_points] section in setup.cfg:
 
     console_scripts =
-         fibonacci = pydhs.skeleton:run
+         pyDHS = pydhs.skeleton:run
 
-Then run `python setup.py install` which will install the command `fibonacci`
+Then run `python setup.py install` which will install the command `pyDHS`
 inside your current environment.
 Besides console scripts, the header (i.e. until _logger...) of this file can
 also be used as template for Python modules.
@@ -20,6 +20,7 @@ import sys
 import logging
 from pydhs import dcss
 from pydhs import test
+from pydhs.test import testDHS
 
 from pydhs import __version__
 
@@ -50,8 +51,8 @@ def parse_args(args):
         metavar="Beamline")
     parser.add_argument(
         dest="dhs_name",
-        help="DHS Name",
-        metavar="DHS Name")
+        help="DHS_Name",
+        metavar="DHS_Name")
     parser.add_argument(
         "-v",
         "--verbose",
@@ -88,17 +89,17 @@ def main(args):
    """
    args = parse_args(args)
    setup_logging(args.loglevel)
-   _logger.debug("Starting pyDHS")
+   _logger.info("Starting pyDHS")
 
    # start communication with DCSS
-   #print("connect to DCSS for beamline: {}".format(args.beamline))
+   print("connect to DCSS for beamline: {}".format(args.beamline))
    # perform DHS-specific stuff 
-   #print("DHS-specific stuff: {}".format(args.dhs_name))
+   print("DHS-specific stuff: {}".format(args.dhs_name))
 
    cv = test.myClassVar
    print("cv: {}".format(cv))
-   my_dhs = test.testDHS('my_test_dhs', '10.11.12.13')
-   my_dhs.loop()
+   my_dhs = testDHS.testDHS('my_test_dhs', '10.11.12.13')
+   # my_dhs.loop()
 
 
    _logger.info("Ending pyDHS")
